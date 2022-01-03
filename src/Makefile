@@ -29,15 +29,14 @@ all: move compile
 compile: 
 	$(G) -o $(TEST)$(EXEC) $(TEST)$(OFILES)	
 	
-move: $(OFILES) rmgch
+move: $(OFILES)
 	@echo "moving all to test"
 	cp *.o $(TEST)
 %.o: %.cc %.h
 	@echo "Compiling $? file"
 	$(G) -c $?  
-rmgch: 
-	rm *.gch
-clean: 
+clean:
 	rm -rf *.o 
+	rm *.gch
 cleantest: 
 	tm -rf $(TEST)*.o $(TEST)*.oct 

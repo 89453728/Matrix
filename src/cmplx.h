@@ -22,7 +22,8 @@ along with this program; see the file COPYING.  If not, see
 
 #ifndef CMPLX_F
 #define CMPLX_F
-#define PI 3.141592654
+#define PI 3.141592653589793
+#define E 2.718281828459045
 #include <cmath>
 #include <iostream>
 #include <ostream>
@@ -49,7 +50,9 @@ namespace ff {
             Complex operator*(const double &o)const;
             Complex operator/(const Complex &o)const;
             Complex operator/(const double &o)const;
-            
+            Complex operator^(const Complex &o)const;
+            Complex operator^(const double &o)const;
+
             /* assignment operators */
             Complex operator=(const Complex &o);
             Complex operator=(const double &o);
@@ -105,7 +108,14 @@ namespace ff {
             }
             friend Complex operator/(const double &a, const Complex &c){
             	return c / a;
-            }
+            }  
+            friend ff::Complex operator^(const double &a, const ff::Complex &c) {
+	            double cte = pow(a,c.Real());
+	            double _real = cte*cos(c.Imag() * log(a));
+	            double _imag = cte*sin(c.Imag() * log(a));
+	            return ff::Complex(_real,_imag);
+            };
+
             friend Complex operator+(const int &a, const Complex &c){
             	return c + (int)a;
             }
@@ -114,6 +124,10 @@ namespace ff {
             }
             friend Complex operator*(const int &a, const Complex &c){
             	return c *(int)a;
+            }
+            friend Complex operator^(const int &a, const Complex &c){
+                Complex ret = Complex(pow(a,c.Real()) + cos(c.Imag() * log(a)), sin(c.Imag()*log(a))); 
+                return ret;
             }
             friend Complex operator/(const int &a, const Complex &c){
             	return c / (int)a;

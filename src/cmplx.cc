@@ -20,6 +20,7 @@ along with this program; see the file COPYING.  If not, see
 ======================================================================
 */
 
+//
 #include "cmplx.h" 
 
 /* constructors */
@@ -64,6 +65,17 @@ ff::Complex ff::Complex::operator/(const ff::Complex &o)const{
 }
 ff::Complex ff::Complex::operator/(const double &o)const{
     return ff::Complex(real/o,imag/o);
+}
+ff::Complex ff::Complex::operator^(const double &o)const {
+    double r = (*this).abs();
+    double tita = (*this).angle();
+    std::cout << "r value: " << r << " tita value: " << tita << "\n"; 
+    return pow(r,o) * (cos(tita*o) + i*sin(tita*o));
+}
+ff::Complex ff::Complex::operator^(const Complex &o)const {
+    double r = (*this).abs();
+    double tita = (*this).angle();
+    return ((*this)^(o.Real()))*pow(E,-tita*o.Imag())*ff::Complex(cos(o.Imag()*log(r)) , sin(o.Imag()*log(r)));
 }
 
 /* assingment operators */
@@ -152,10 +164,10 @@ bool ff::Complex::operator<=(const double &o)const{
 
 /* printing operators */
 std::string ff::Complex::operator<<(const Complex &o)const{
-    return (*this).toString() + o.toString();
+    return (*this).toString() + " " +o.toString();
 }
 std::string ff::Complex::operator<<(const double &o)const{
-    return (*this).toString() + std::to_string(o) + "/n";
+    return (*this).toString() + " " + std::to_string(o);
 }
 
 /* accessing data operators */
@@ -169,7 +181,7 @@ double ff::Complex::abs()const{
     return sqrt(pow(real,2) + pow(imag,2));
 }
 double ff::Complex::angle()const{
-    return atan(real/imag);
+    return atan(imag/real);
 }
 double ff::Complex::angleDeg()const{
     return 180*(*this).angle()/PI;
@@ -182,9 +194,9 @@ ff::Complex ff::Complex::conj()const{
 std::string ff::Complex::toString()const{
     std::string ret = "";
     if(imag > 0){
-        ret +=  std::to_string(real) + " + " +std::to_string(imag) + "i\n";
+        ret +=  std::to_string(real) + " + " +std::to_string(imag) + "i";
     }else {
-        ret += std::to_string(real) + " " + std::to_string(imag) + "i\n";
+        ret += std::to_string(real) + " " + std::to_string(imag) + "i";
     }
     return ret;
-} 
+}
